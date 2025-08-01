@@ -383,6 +383,31 @@
                 <p id="challengeDesc">1×12 से 12×12 तक के रैंडम सवाल</p>
                 <button class="btn btn-primary" onclick="showGame('challenge')" id="challengeBtn">चुनौती लें</button>
             </div>
+
+            <div class="game-card">
+                <h3 id="reverseTitle">🔄 उल्टा सवाल</h3>
+                <p id="reverseDesc">जैसे: 60 = 12 × ? सही उत्तर दें (5 मिनट में जितने हो सकें)</p>
+                <button class="btn btn-primary" onclick="showGame('reverseGame')" id="reverseBtn">खेल शुरू करें</button>
+            </div>
+        </div>
+
+        <!-- Reverse 12 Table Game -->
+        <div id="reverseGame" class="game-area">
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← खेलों में वापस जाएं</button>
+            <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
+            <div class="instructions" id="reverseInstructions">
+                आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
+            </div>
+            <div class="timer" id="reverseTimer">समय: 5:00</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="reverseProgress"></div>
+            </div>
+            <div class="score" id="reverseScore">स्कोर: 0</div>
+            <div class="question" id="reverseQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
+            <input type="number" id="reverseAnswer" class="answer-input" placeholder="?" style="display:none;">
+            <br>
+            <button class="btn btn-success" id="reverseStart" onclick="startReverseGame()">खेल शुरू करें</button>
+            <button class="btn" id="reverseSubmit" onclick="submitReverse()" style="display:none;">जवाब भेजें</button>
         </div>
 
         <!-- Times Table Chart -->
@@ -473,12 +498,38 @@
             <button class="btn btn-success" id="challengeStart" onclick="startChallenge()">चुनौती शुरू करें</button>
             <button class="btn" id="challengeSubmit" onclick="submitChallenge()" style="display:none;">भेजें</button>
         </div>
+
+        <!-- Reverse Game -->
+        <div id="reverseGame" class="game-area">
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← खेलों में वापस जाएं</button>
+            <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
+            <div class="instructions" id="reverseInstructions">
+                आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
+            </div>
+            <div id="reverseTimer">समय: 5:00</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="reverseProgress"></div>
+            </div>
+            <div class="score" id="reverseScore">स्कोर: 0</div>
+            <div class="question" id="reverseQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
+            <input type="number" id="reverseAnswer" class="answer-input" placeholder="?" style="display:none;">
+            <br>
+            <button class="btn btn-success" id="reverseStart" onclick="startReverseGame()">खेल शुरू करें</button>
+            <button class="btn" id="reverseSubmit" onclick="submitReverse()" style="display:none;">जवाब भेजें</button>
+        </div>
     </div>
 
     <script>
         // Language translations
         const translations = {
             hi: {
+                reverseTitle: '🔄 उल्टा सवाल',
+                reverseDesc: 'जैसे: 60 = 12 × ? सही उत्तर दें (5 मिनट में जितने हो सकें)',
+                reverseBtn: 'खेल शुरू करें',
+                reverseGameTitle: '🔄 उल्टा सवाल',
+                reverseInstructions: 'आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!',
+                reverseStart: 'खेल शुरू करें',
+                reverseSubmit: 'जवाब भेजें',
                 title: "12 का पहाड़ा सीखें",
                 subtitle: "मजेदार खेलों के साथ गुणा सीखें!",
                 chartTitle: "📚 पहाड़े की तालिका",
@@ -542,6 +593,13 @@
                 best: "सर्वश्रेष्ठ:"
             },
             en: {
+                reverseTitle: '🔄 Reverse Quiz',
+                reverseDesc: 'E.g.: 60 = 12 × ? Answer as many as you can in 5 minutes',
+                reverseBtn: 'Start Game',
+                reverseGameTitle: '🔄 Reverse Quiz',
+                reverseInstructions: 'Answer: 12 × ? = (given number). As many as you can in 5 minutes!',
+                reverseStart: 'Start Game',
+                reverseSubmit: 'Submit',
                 title: "🎯 Learn 12's Times Table 🎯",
                 subtitle: "Master multiplication with fun interactive games!",
                 chartTitle: "📚 Times Table Chart",
@@ -615,7 +673,8 @@
             memory: { flippedCards: [], matches: 0, cards: [] },
             racing: { solved: 0, currentProblem: null },
             target: { hits: 0, attempts: 0, currentProblem: null },
-            challenge: { streak: 0, best: 0, currentProblem: null }
+            challenge: { streak: 0, best: 0, currentProblem: null },
+            reverse: { score: 0, timeLeft: 300, timer: null, currentProblem: null }
         };
 
         // Language switching function
@@ -664,6 +723,10 @@
             document.getElementById('challengeTitle').textContent = t.challengeTitle;
             document.getElementById('challengeDesc').textContent = t.challengeDesc;
             document.getElementById('challengeBtn').textContent = t.challengeBtn;
+
+            document.getElementById('reverseTitle').textContent = t.reverseTitle;
+            document.getElementById('reverseDesc').textContent = t.reverseDesc;
+            document.getElementById('reverseBtn').textContent = t.reverseBtn;
             
             // Update back buttons
             document.querySelectorAll('[id^="backBtn"]').forEach(btn => {
@@ -688,6 +751,9 @@
             
             document.getElementById('challengeGameTitle').textContent = t.challengeGameTitle;
             document.getElementById('challengeInstructions').textContent = t.challengeInstructions;
+
+            document.getElementById('reverseGameTitle').textContent = t.reverseGameTitle;
+            document.getElementById('reverseInstructions').textContent = t.reverseInstructions;
             
             // Update buttons and labels
             document.getElementById('quickFireStart').textContent = t.startQuiz;
@@ -707,6 +773,8 @@
             document.getElementById('racingScore').textContent = currentLanguage === 'hi' ? `हल किए गए सवाल: ${gameData.racing.solved}/10` : `Problems Solved: ${gameData.racing.solved}/10`;
             document.getElementById('targetScore').textContent = `${t.hits} ${gameData.target.hits} | ${t.accuracy} ${gameData.target.attempts > 0 ? Math.round((gameData.target.hits / gameData.target.attempts) * 100) : 0}%`;
             document.getElementById('challengeScore').textContent = `${t.streak} ${gameData.challenge.streak} | ${t.best} ${gameData.challenge.best}`;
+            document.getElementById('reverseScore').textContent = currentLanguage === 'hi' ? `स्कोर: ${gameData.reverse.score}` : `Score: ${gameData.reverse.score}`;
+            document.getElementById('reverseTimer').textContent = currentLanguage === 'hi' ? `समय: 5:00` : `Time: 5:00`;
             
             // Update question placeholders
             const t_startMessage = currentLanguage === 'hi' ? 'शुरू करने के लिए स्टार्ट दबाएं!' : 'Click Start to begin!';
@@ -714,6 +782,7 @@
             document.getElementById('racingQuestion').textContent = t_startMessage;
             document.getElementById('targetQuestion').textContent = t_startMessage;
             document.getElementById('challengeQuestion').textContent = t_startMessage;
+            document.getElementById('reverseQuestion').textContent = t_startMessage;
             
             // Update times table if visible
             if (currentGame === 'tableChart') {
@@ -752,8 +821,93 @@
                 initTimesTable();
             } else if (gameId === 'memoryMatch') {
                 initMemoryGame();
+            } else if (gameId === 'reverseGame') {
+                updateLanguage();
             }
         }
+
+        // Reverse 12 Table Game
+        function startReverseGame() {
+    gameData.reverse.score = 0;
+    gameData.reverse.timeLeft = 300;
+    document.getElementById('reverseStart').style.display = 'none';
+    document.getElementById('reverseAnswer').style.display = 'inline-block';
+    document.getElementById('reverseSubmit').style.display = 'inline-block';
+    document.getElementById('reverseAnswer').focus();
+    generateReverseProblem();
+    updateReverseTimerBar();
+    if (gameData.reverse.timer) clearInterval(gameData.reverse.timer);
+    gameData.reverse.timer = setInterval(() => {
+        gameData.reverse.timeLeft--;
+        updateReverseTimerBar();
+        let min = Math.floor(gameData.reverse.timeLeft / 60);
+        let sec = gameData.reverse.timeLeft % 60;
+        let timeStr = currentLanguage === 'hi' ? `समय: ${min}:${sec.toString().padStart(2, '0')}` : `Time: ${min}:${sec.toString().padStart(2, '0')}`;
+        document.getElementById('reverseTimer').textContent = timeStr;
+        if (gameData.reverse.timeLeft <= 0) {
+            endReverseGame();
+        }
+    }, 1000);
+    document.getElementById('reverseAnswer').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            submitReverse();
+        }
+    });
+}
+
+function generateReverseProblem() {
+    // Pick a random product from 12 table
+    let n = Math.floor(Math.random() * 12) + 1;
+    gameData.reverse.currentProblem = { num: n, product: 12 * n };
+    document.getElementById('reverseQuestion').textContent = `${gameData.reverse.currentProblem.product} = 12 × ?`;
+}
+
+function submitReverse() {
+    const userAnswer = parseInt(document.getElementById('reverseAnswer').value);
+    const questionElem = document.getElementById('reverseQuestion');
+    if (userAnswer === gameData.reverse.currentProblem.num) {
+        gameData.reverse.score++;
+        const scoreText = currentLanguage === 'hi' ? `स्कोर: ${gameData.reverse.score}` : `Score: ${gameData.reverse.score}`;
+        document.getElementById('reverseScore').textContent = scoreText;
+        questionElem.classList.remove('sad-animation');
+        questionElem.classList.add('happy-animation');
+        setTimeout(() => {
+            questionElem.classList.remove('happy-animation', 'sad-animation');
+            document.getElementById('reverseAnswer').value = '';
+            generateReverseProblem();
+        }, 700);
+    } else {
+        questionElem.classList.remove('happy-animation');
+        questionElem.classList.add('sad-animation');
+        // Show correct answer
+        const correctText = currentLanguage === 'hi' ? `सही जवाब: ${gameData.reverse.currentProblem.num}` : `Correct answer: ${gameData.reverse.currentProblem.num}`;
+        const prevText = questionElem.textContent;
+        questionElem.textContent = prevText + '  ' + correctText;
+        setTimeout(() => {
+            questionElem.classList.remove('happy-animation', 'sad-animation');
+            document.getElementById('reverseAnswer').value = '';
+            generateReverseProblem();
+        }, 1200);
+    }
+}
+
+function endReverseGame() {
+    clearInterval(gameData.reverse.timer);
+    const t = translations[currentLanguage];
+    const gameOverText = currentLanguage === 'hi' ?
+        `खेल समाप्त! अंतिम स्कोर: ${gameData.reverse.score}` :
+        `Game Over! Final Score: ${gameData.reverse.score}`;
+    document.getElementById('reverseQuestion').textContent = gameOverText;
+    document.getElementById('reverseAnswer').style.display = 'none';
+    document.getElementById('reverseSubmit').style.display = 'none';
+    document.getElementById('reverseStart').style.display = 'inline-block';
+    document.getElementById('reverseStart').textContent = t.playAgain;
+}
+
+function updateReverseTimerBar() {
+    const percent = (gameData.reverse.timeLeft / 300) * 100;
+    document.getElementById('reverseProgress').style.width = percent + '%';
+}
 
         function showMainMenu() {
             document.getElementById('mainMenu').style.display = 'grid';
@@ -773,12 +927,35 @@
                 gameData.quickFire.timer = null;
             }
             gameData.quickFire = { score: 0, timeLeft: 60, timer: null, currentProblem: null };
+
+            // Reset Reverse Game
+            if (gameData.reverse.timer) {
+                clearInterval(gameData.reverse.timer);
+                gameData.reverse.timer = null;
+            }
+            gameData.reverse = { score: 0, timeLeft: 300, timer: null, currentProblem: null };
             
             // Reset other games
             gameData.memory = { flippedCards: [], matches: 0, cards: [] };
             gameData.racing = { solved: 0, currentProblem: null };
             gameData.target = { hits: 0, attempts: 0, currentProblem: null };
             gameData.challenge = { streak: 0, best: localStorage.getItem('challengeBest') || 0, currentProblem: null };
+            gameData.reverse = { score: 0, timeLeft: 300, timer: null, currentProblem: null };
+            // Update reverse game
+            document.getElementById('reverseTitle').textContent = t.reverseTitle || '🔄 उल्टा सवाल';
+            document.getElementById('reverseDesc').textContent = t.reverseDesc || 'जैसे: 60 = 12 × ? सही उत्तर दें (5 मिनट में जितने हो सकें)';
+            document.getElementById('reverseBtn').textContent = t.reverseBtn || 'खेल शुरू करें';
+            document.getElementById('reverseGameTitle').textContent = t.reverseGameTitle || '🔄 उल्टा सवाल';
+            document.getElementById('reverseInstructions').textContent = t.reverseInstructions || 'आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!';
+            document.getElementById('reverseStart').textContent = t.reverseStart || 'खेल शुरू करें';
+            document.getElementById('reverseSubmit').textContent = t.reverseSubmit || 'जवाब भेजें';
+            // Timer and score
+            let min = Math.floor(gameData.reverse.timeLeft / 60);
+            let sec = gameData.reverse.timeLeft % 60;
+            let timeStr = currentLanguage === 'hi' ? `समय: ${min}:${sec.toString().padStart(2, '0')}` : `Time: ${min}:${sec.toString().padStart(2, '0')}`;
+            document.getElementById('reverseTimer').textContent = timeStr;
+            document.getElementById('reverseScore').textContent = currentLanguage === 'hi' ? `स्कोर: ${gameData.reverse.score}` : `Score: ${gameData.reverse.score}`;
+            document.getElementById('reverseQuestion').textContent = t.startMessage;
             
             updateLanguage();
         }
@@ -841,15 +1018,24 @@
                 document.getElementById('quickFireScore').textContent = scoreText;
                 questionElem.classList.remove('sad-animation');
                 questionElem.classList.add('happy-animation');
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    document.getElementById('quickFireAnswer').value = '';
+                    generateQuickFireProblem();
+                }, 700);
             } else {
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
+                // Show correct answer
+                const correctText = currentLanguage === 'hi' ? `सही जवाब: ${gameData.quickFire.currentProblem.answer}` : `Correct answer: ${gameData.quickFire.currentProblem.answer}`;
+                const prevText = questionElem.textContent;
+                questionElem.textContent = prevText + '  ' + correctText;
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    document.getElementById('quickFireAnswer').value = '';
+                    generateQuickFireProblem();
+                }, 1200);
             }
-            setTimeout(() => {
-                questionElem.classList.remove('happy-animation', 'sad-animation');
-            }, 700);
-            document.getElementById('quickFireAnswer').value = '';
-            generateQuickFireProblem();
         }
 
         function endQuickFire() {
@@ -1016,15 +1202,24 @@
                     }, 700);
                     return;
                 }
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    document.getElementById('racingAnswer').value = '';
+                    generateRacingProblem();
+                }, 700);
             } else {
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
+                // Show correct answer
+                const correctText = currentLanguage === 'hi' ? `सही जवाब: ${gameData.racing.currentProblem.answer}` : `Correct answer: ${gameData.racing.currentProblem.answer}`;
+                const prevText = questionElem.textContent;
+                questionElem.textContent = prevText + '  ' + correctText;
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    document.getElementById('racingAnswer').value = '';
+                    generateRacingProblem();
+                }, 1200);
             }
-            setTimeout(() => {
-                questionElem.classList.remove('happy-animation', 'sad-animation');
-            }, 700);
-            document.getElementById('racingAnswer').value = '';
-            generateRacingProblem();
         }
 
         // Target Practice
@@ -1058,20 +1253,34 @@
                 gameData.target.hits++;
                 questionElem.classList.remove('sad-animation');
                 questionElem.classList.add('happy-animation');
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    const accuracy = Math.round((gameData.target.hits / gameData.target.attempts) * 100);
+                    const scoreText = currentLanguage === 'hi' ? 
+                        `हिट: ${gameData.target.hits} | सटीकता: ${accuracy}%` :
+                        `Hits: ${gameData.target.hits} | Accuracy: ${accuracy}%`;
+                    document.getElementById('targetScore').textContent = scoreText;
+                    document.getElementById('targetAnswer').value = '';
+                    generateTargetProblem();
+                }, 700);
             } else {
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
+                // Show correct answer
+                const correctText = currentLanguage === 'hi' ? `सही जवाब: ${gameData.target.currentProblem.answer}` : `Correct answer: ${gameData.target.currentProblem.answer}`;
+                const prevText = questionElem.textContent;
+                questionElem.textContent = prevText + '  ' + correctText;
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    const accuracy = Math.round((gameData.target.hits / gameData.target.attempts) * 100);
+                    const scoreText = currentLanguage === 'hi' ? 
+                        `हिट: ${gameData.target.hits} | सटीकता: ${accuracy}%` :
+                        `Hits: ${gameData.target.hits} | Accuracy: ${accuracy}%`;
+                    document.getElementById('targetScore').textContent = scoreText;
+                    document.getElementById('targetAnswer').value = '';
+                    generateTargetProblem();
+                }, 1200);
             }
-            setTimeout(() => {
-                questionElem.classList.remove('happy-animation', 'sad-animation');
-            }, 700);
-            const accuracy = Math.round((gameData.target.hits / gameData.target.attempts) * 100);
-            const scoreText = currentLanguage === 'hi' ? 
-                `हिट: ${gameData.target.hits} | सटीकता: ${accuracy}%` :
-                `Hits: ${gameData.target.hits} | Accuracy: ${accuracy}%`;
-            document.getElementById('targetScore').textContent = scoreText;
-            document.getElementById('targetAnswer').value = '';
-            generateTargetProblem();
         }
 
         // Challenge Mode
@@ -1107,6 +1316,15 @@
                     gameData.challenge.best = gameData.challenge.streak;
                     localStorage.setItem('challengeBest', gameData.challenge.best);
                 }
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    const scoreText = currentLanguage === 'hi' ? 
+                        `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
+                        `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
+                    document.getElementById('challengeScore').textContent = scoreText;
+                    document.getElementById('challengeAnswer').value = '';
+                    generateChallengeProblem();
+                }, 700);
             } else {
                 if (gameData.challenge.streak > 0) {
                     const wrongText = currentLanguage === 'hi' ? 
@@ -1117,16 +1335,20 @@
                 gameData.challenge.streak = 0;
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
+                // Show correct answer
+                const correctText = currentLanguage === 'hi' ? `सही जवाब: ${gameData.challenge.currentProblem.answer}` : `Correct answer: ${gameData.challenge.currentProblem.answer}`;
+                const prevText = questionElem.textContent;
+                questionElem.textContent = prevText + '  ' + correctText;
+                setTimeout(() => {
+                    questionElem.classList.remove('happy-animation', 'sad-animation');
+                    const scoreText = currentLanguage === 'hi' ? 
+                        `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
+                        `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
+                    document.getElementById('challengeScore').textContent = scoreText;
+                    document.getElementById('challengeAnswer').value = '';
+                    generateChallengeProblem();
+                }, 1200);
             }
-            setTimeout(() => {
-                questionElem.classList.remove('happy-animation', 'sad-animation');
-            }, 700);
-            const scoreText = currentLanguage === 'hi' ? 
-                `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
-                `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
-            document.getElementById('challengeScore').textContent = scoreText;
-            document.getElementById('challengeAnswer').value = '';
-            generateChallengeProblem();
         }
 
         // Initialize on page load
