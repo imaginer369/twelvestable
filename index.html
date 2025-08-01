@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>12 का पहाड़ा सीखें - मजेदार खेल!</title>
     <style>
+        /* Happy and Sad Animations */
+        .happy-animation {
+            animation: happy-bounce 0.7s;
+        }
+        @keyframes happy-bounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.2) rotate(-5deg); }
+            60% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1); }
+        }
+        .sad-animation {
+            animation: sad-shake 0.7s;
+        }
+        @keyframes sad-shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+            100% { transform: translateX(0); }
+        }
         * {
             margin: 0;
             padding: 0;
@@ -813,14 +834,20 @@
 
         function submitQuickFire() {
             const userAnswer = parseInt(document.getElementById('quickFireAnswer').value);
+            const questionElem = document.getElementById('quickFireQuestion');
             if (userAnswer === gameData.quickFire.currentProblem.answer) {
                 gameData.quickFire.score++;
-                const scoreText = currentLanguage === 'hi' ? `स्कोर: ${toHindiNumber(gameData.quickFire.score)}` : `Score: ${gameData.quickFire.score}`;
+                const scoreText = currentLanguage === 'hi' ? `स्कोर: ${gameData.quickFire.score}` : `Score: ${gameData.quickFire.score}`;
                 document.getElementById('quickFireScore').textContent = scoreText;
-                document.getElementById('quickFireScore').classList.add('celebration');
-                setTimeout(() => document.getElementById('quickFireScore').classList.remove('celebration'), 500);
+                questionElem.classList.remove('sad-animation');
+                questionElem.classList.add('happy-animation');
+            } else {
+                questionElem.classList.remove('happy-animation');
+                questionElem.classList.add('sad-animation');
             }
-            
+            setTimeout(() => {
+                questionElem.classList.remove('happy-animation', 'sad-animation');
+            }, 700);
             document.getElementById('quickFireAnswer').value = '';
             generateQuickFireProblem();
         }
@@ -898,23 +925,38 @@
                 cardElements[index1].classList.add('matched');
                 cardElements[index2].classList.add('matched');
                 gameData.memory.matches++;
+                cardElements[index1].classList.remove('sad-animation');
+                cardElements[index2].classList.remove('sad-animation');
+                cardElements[index1].classList.add('happy-animation');
+                cardElements[index2].classList.add('happy-animation');
                 const matchText = currentLanguage === 'hi' ? 
-                    `जोड़े: ${toHindiNumber(gameData.memory.matches)}/6` :
+                    `जोड़े: ${gameData.memory.matches}/6` :
                     `Matches: ${gameData.memory.matches}/6`;
                 document.getElementById('memoryScore').textContent = matchText;
-                
                 if (gameData.memory.matches === 6) {
                     const congratsText = currentLanguage === 'hi' ? 
                         'बधाई हो! आपने सभी जोड़े मिला लिए! 🎉' :
                         'Congratulations! You matched all pairs! 🎉';
                     setTimeout(() => alert(congratsText), 500);
                 }
+                setTimeout(() => {
+                    cardElements[index1].classList.remove('happy-animation');
+                    cardElements[index2].classList.remove('happy-animation');
+                }, 700);
             } else {
                 // No match
                 cardElements[index1].textContent = '?';
                 cardElements[index2].textContent = '?';
-                cardElements[index1].classList.remove('flipped');
-                cardElements[index2].classList.remove('flipped');
+                cardElements[index1].classList.remove('happy-animation');
+                cardElements[index2].classList.remove('happy-animation');
+                cardElements[index1].classList.add('sad-animation');
+                cardElements[index2].classList.add('sad-animation');
+                setTimeout(() => {
+                    cardElements[index1].classList.remove('sad-animation');
+                    cardElements[index2].classList.remove('sad-animation');
+                    cardElements[index1].classList.remove('flipped');
+                    cardElements[index2].classList.remove('flipped');
+                }, 700);
             }
             
             gameData.memory.flippedCards = [];
@@ -946,18 +988,19 @@
 
         function submitRacing() {
             const userAnswer = parseInt(document.getElementById('racingAnswer').value);
+            const questionElem = document.getElementById('racingQuestion');
             if (userAnswer === gameData.racing.currentProblem.answer) {
                 gameData.racing.solved++;
                 const progress = (gameData.racing.solved / 10) * 100;
                 const carPosition = (gameData.racing.solved / 10) * 85; // 85% max to keep car visible
-                
                 const scoreText = currentLanguage === 'hi' ? 
-                    `हल किए गए सवाल: ${toHindiNumber(gameData.racing.solved)}/${toHindiNumber(10)}` :
+                    `हल किए गए सवाल: ${gameData.racing.solved}/10` :
                     `Problems Solved: ${gameData.racing.solved}/10`;
                 document.getElementById('racingScore').textContent = scoreText;
                 document.getElementById('racingProgress').style.width = `${progress}%`;
                 document.getElementById('racingCar').style.left = `${carPosition}%`;
-                
+                questionElem.classList.remove('sad-animation');
+                questionElem.classList.add('happy-animation');
                 if (gameData.racing.solved >= 10) {
                     const winText = currentLanguage === 'hi' ? 
                         'रेस पूरी! आप जीत गए! 🏆' :
@@ -968,10 +1011,18 @@
                     document.getElementById('racingSubmit').style.display = 'none';
                     document.getElementById('racingStart').style.display = 'inline-block';
                     document.getElementById('racingStart').textContent = raceAgainText;
+                    setTimeout(() => {
+                        questionElem.classList.remove('happy-animation', 'sad-animation');
+                    }, 700);
                     return;
                 }
+            } else {
+                questionElem.classList.remove('happy-animation');
+                questionElem.classList.add('sad-animation');
             }
-            
+            setTimeout(() => {
+                questionElem.classList.remove('happy-animation', 'sad-animation');
+            }, 700);
             document.getElementById('racingAnswer').value = '';
             generateRacingProblem();
         }
@@ -1002,19 +1053,23 @@
         function submitTarget() {
             const userAnswer = parseInt(document.getElementById('targetAnswer').value);
             gameData.target.attempts++;
-            
+            const questionElem = document.getElementById('targetQuestion');
             if (userAnswer === gameData.target.currentProblem.answer) {
                 gameData.target.hits++;
-                document.getElementById('targetQuestion').classList.add('celebration');
-                setTimeout(() => document.getElementById('targetQuestion').classList.remove('celebration'), 500);
+                questionElem.classList.remove('sad-animation');
+                questionElem.classList.add('happy-animation');
+            } else {
+                questionElem.classList.remove('happy-animation');
+                questionElem.classList.add('sad-animation');
             }
-            
+            setTimeout(() => {
+                questionElem.classList.remove('happy-animation', 'sad-animation');
+            }, 700);
             const accuracy = Math.round((gameData.target.hits / gameData.target.attempts) * 100);
             const scoreText = currentLanguage === 'hi' ? 
-                `हिट: ${toHindiNumber(gameData.target.hits)} | सटीकता: ${toHindiNumber(accuracy)}%` :
+                `हिट: ${gameData.target.hits} | सटीकता: ${accuracy}%` :
                 `Hits: ${gameData.target.hits} | Accuracy: ${accuracy}%`;
             document.getElementById('targetScore').textContent = scoreText;
-            
             document.getElementById('targetAnswer').value = '';
             generateTargetProblem();
         }
@@ -1043,9 +1098,11 @@
 
         function submitChallenge() {
             const userAnswer = parseInt(document.getElementById('challengeAnswer').value);
-            
+            const questionElem = document.getElementById('challengeQuestion');
             if (userAnswer === gameData.challenge.currentProblem.answer) {
                 gameData.challenge.streak++;
+                questionElem.classList.remove('sad-animation');
+                questionElem.classList.add('happy-animation');
                 if (gameData.challenge.streak > gameData.challenge.best) {
                     gameData.challenge.best = gameData.challenge.streak;
                     localStorage.setItem('challengeBest', gameData.challenge.best);
@@ -1053,18 +1110,21 @@
             } else {
                 if (gameData.challenge.streak > 0) {
                     const wrongText = currentLanguage === 'hi' ? 
-                        `गलत जवाब! आपकी स्ट्रीक थी ${toHindiNumber(gameData.challenge.streak)}। फिर कोशिश करें!` :
+                        `गलत जवाब! आपकी स्ट्रीक थी ${gameData.challenge.streak}। फिर कोशिश करें!` :
                         `Wrong answer! Your streak was ${gameData.challenge.streak}. Try again!`;
                     alert(wrongText);
                 }
                 gameData.challenge.streak = 0;
+                questionElem.classList.remove('happy-animation');
+                questionElem.classList.add('sad-animation');
             }
-            
+            setTimeout(() => {
+                questionElem.classList.remove('happy-animation', 'sad-animation');
+            }, 700);
             const scoreText = currentLanguage === 'hi' ? 
-                `स्ट्रीक: ${toHindiNumber(gameData.challenge.streak)} | सर्वश्रेष्ठ: ${toHindiNumber(gameData.challenge.best)}` :
+                `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
                 `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
             document.getElementById('challengeScore').textContent = scoreText;
-            
             document.getElementById('challengeAnswer').value = '';
             generateChallengeProblem();
         }
