@@ -680,21 +680,12 @@
             document.getElementById('challengeSubmit').textContent = t.submit;
             
             // Update scores and timers
-            if (currentLanguage === 'hi') {
-                document.getElementById('timer').textContent = `${t.timeLeft} 60 ${t.seconds}`;
-                document.getElementById('quickFireScore').textContent = `स्कोर: ${gameData.quickFire.score}`;
-                document.getElementById('memoryScore').textContent = `जोड़े: ${gameData.memory.matches}/6`;
-                document.getElementById('racingScore').textContent = `हल किए गए सवाल: ${gameData.racing.solved}/10`;
-                document.getElementById('targetScore').textContent = `${t.hits} ${gameData.target.hits} | ${t.accuracy} ${gameData.target.attempts > 0 ? Math.round((gameData.target.hits / gameData.target.attempts) * 100) : 0}%`;
-                document.getElementById('challengeScore').textContent = `${t.streak} ${gameData.challenge.streak} | ${t.best} ${gameData.challenge.best}`;
-            } else {
-                document.getElementById('timer').textContent = `${t.timeLeft} 60${t.seconds}`;
-                document.getElementById('quickFireScore').textContent = `Score: ${gameData.quickFire.score}`;
-                document.getElementById('memoryScore').textContent = `Matches: ${gameData.memory.matches}/6`;
-                document.getElementById('racingScore').textContent = `Problems Solved: ${gameData.racing.solved}/10`;
-                document.getElementById('targetScore').textContent = `${t.hits} ${gameData.target.hits} | ${t.accuracy} ${gameData.target.attempts > 0 ? Math.round((gameData.target.hits / gameData.target.attempts) * 100) : 0}%`;
-                document.getElementById('challengeScore').textContent = `${t.streak} ${gameData.challenge.streak} | ${t.best} ${gameData.challenge.best}`;
-            }
+            document.getElementById('timer').textContent = currentLanguage === 'hi' ? `${t.timeLeft} 60 ${t.seconds}` : `${t.timeLeft} 60${t.seconds}`;
+            document.getElementById('quickFireScore').textContent = currentLanguage === 'hi' ? `स्कोर: ${gameData.quickFire.score}` : `Score: ${gameData.quickFire.score}`;
+            document.getElementById('memoryScore').textContent = currentLanguage === 'hi' ? `जोड़े: ${gameData.memory.matches}/6` : `Matches: ${gameData.memory.matches}/6`;
+            document.getElementById('racingScore').textContent = currentLanguage === 'hi' ? `हल किए गए सवाल: ${gameData.racing.solved}/10` : `Problems Solved: ${gameData.racing.solved}/10`;
+            document.getElementById('targetScore').textContent = `${t.hits} ${gameData.target.hits} | ${t.accuracy} ${gameData.target.attempts > 0 ? Math.round((gameData.target.hits / gameData.target.attempts) * 100) : 0}%`;
+            document.getElementById('challengeScore').textContent = `${t.streak} ${gameData.challenge.streak} | ${t.best} ${gameData.challenge.best}`;
             
             // Update question placeholders
             const t_startMessage = currentLanguage === 'hi' ? 'शुरू करने के लिए स्टार्ट दबाएं!' : 'Click Start to begin!';
@@ -710,11 +701,8 @@
         }
 
         // Hindi number conversion
+        // Always use standard numerals
         function toHindiNumber(num) {
-            if (currentLanguage === 'hi') {
-                const hindiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-                return num.toString().replace(/\d/g, digit => hindiDigits[digit]);
-            }
             return num.toString();
         }
 
@@ -725,11 +713,7 @@
             for (let i = 1; i <= 12; i++) {
                 const item = document.createElement('div');
                 item.className = 'table-item';
-                if (currentLanguage === 'hi') {
-                    item.innerHTML = `<span class="number-hindi">${toHindiNumber(12)} × ${toHindiNumber(i)} = ${toHindiNumber(12 * i)}</span>`;
-                } else {
-                    item.textContent = `12 × ${i} = ${12 * i}`;
-                }
+                item.textContent = `12 × ${i} = ${12 * i}`;
                 grid.appendChild(item);
             }
         }
@@ -824,11 +808,7 @@
         function generateQuickFireProblem() {
             gameData.quickFire.currentProblem = generateProblem();
             const problem = gameData.quickFire.currentProblem;
-            if (currentLanguage === 'hi') {
-                document.getElementById('quickFireQuestion').innerHTML = `<span class="number-hindi">${toHindiNumber(problem.num1)} × ${toHindiNumber(problem.num2)} = ?</span>`;
-            } else {
-                document.getElementById('quickFireQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
-            }
+            document.getElementById('quickFireQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
         }
 
         function submitQuickFire() {
@@ -868,13 +848,8 @@
             const problems = [];
             for (let i = 1; i <= 6; i++) {
                 const problem = generateProblem();
-                const problemText = currentLanguage === 'hi' ? 
-                    `${toHindiNumber(problem.num1)} × ${toHindiNumber(problem.num2)}` :
-                    `${problem.num1} × ${problem.num2}`;
-                const answerText = currentLanguage === 'hi' ? 
-                    toHindiNumber(problem.answer) :
-                    problem.answer.toString();
-                
+                const problemText = `${problem.num1} × ${problem.num2}`;
+                const answerText = problem.answer.toString();
                 problems.push({ type: 'problem', content: problemText, answer: problem.answer });
                 problems.push({ type: 'answer', content: answerText, answer: problem.answer });
             }
@@ -966,11 +941,7 @@
         function generateRacingProblem() {
             gameData.racing.currentProblem = generateProblem();
             const problem = gameData.racing.currentProblem;
-            if (currentLanguage === 'hi') {
-                document.getElementById('racingQuestion').innerHTML = `<span class="number-hindi">${toHindiNumber(problem.num1)} × ${toHindiNumber(problem.num2)} = ?</span>`;
-            } else {
-                document.getElementById('racingQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
-            }
+            document.getElementById('racingQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
         }
 
         function submitRacing() {
@@ -1025,11 +996,7 @@
         function generateTargetProblem() {
             gameData.target.currentProblem = generateProblem();
             const problem = gameData.target.currentProblem;
-            if (currentLanguage === 'hi') {
-                document.getElementById('targetQuestion').innerHTML = `🎯 <span class="number-hindi">${toHindiNumber(problem.num1)} × ${toHindiNumber(problem.num2)} = ?</span>`;
-            } else {
-                document.getElementById('targetQuestion').textContent = `🎯 ${problem.num1} × ${problem.num2} = ?`;
-            }
+            document.getElementById('targetQuestion').textContent = `🎯 ${problem.num1} × ${problem.num2} = ?`;
         }
 
         function submitTarget() {
@@ -1071,11 +1038,7 @@
         function generateChallengeProblem() {
             gameData.challenge.currentProblem = generateProblem(true); // Include other tables
             const problem = gameData.challenge.currentProblem;
-            if (currentLanguage === 'hi') {
-                document.getElementById('challengeQuestion').innerHTML = `<span class="number-hindi">${toHindiNumber(problem.num1)} × ${toHindiNumber(problem.num2)} = ?</span>`;
-            } else {
-                document.getElementById('challengeQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
-            }
+            document.getElementById('challengeQuestion').textContent = `${problem.num1} × ${problem.num2} = ?`;
         }
 
         function submitChallenge() {
