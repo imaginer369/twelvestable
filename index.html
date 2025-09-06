@@ -47,26 +47,28 @@
         }
 
         .language-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
             z-index: 1000;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 18px;
+            padding: 4px 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: opacity 0.3s;
         }
 
         .language-btn {
             background: linear-gradient(45deg, #4facfe, #00f2fe);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 15px;
+            padding: 4px 10px;
+            border-radius: 10px;
             cursor: pointer;
-            margin: 0 5px;
+            margin: 0 2px;
             font-weight: bold;
+            font-size: 0.9em;
             transition: all 0.3s ease;
         }
 
@@ -80,11 +82,11 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 10px;
+            padding: 12px 10px;
             color: white;
         }
 
@@ -92,7 +94,19 @@
             font-size: 3em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            word-break: break-word;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
         }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+                padding: 0 10px;
+            }
+        }
+        
 
         .subtitle {
             font-size: 1.2em;
@@ -108,11 +122,12 @@
 
         .game-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 8px;
+            padding: 12px 8px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 0.95em;
         }
 
         .game-card:hover {
@@ -288,7 +303,26 @@
         .back-btn {
             background: linear-gradient(45deg, #636e72, #2d3436);
             margin-bottom: 20px;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 2000;
+            font-size: 0.9em;
+            padding: 6px 16px;
+            border-radius: 18px;
+            min-width: unset;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
         }
+
+        @media (max-width: 600px) {
+            .back-btn {
+                top: 8px;
+                left: 8px;
+                font-size: 0.8em;
+                padding: 4px 10px;
+            }
+        }
+        
 
         .timer {
             font-size: 1.5em;
@@ -337,22 +371,22 @@
     </style>
 </head>
 <body>
-    <div class="language-toggle">
-        <button class="language-btn active" onclick="setLanguage('hi')">हिंदी</button>
-        <button class="language-btn" onclick="setLanguage('en')">English</button>
+    <div class="language-toggle" id="languageToggle">
+        <button class="language-btn active" onclick="setLanguage('hi')">ह</button>
+        <button class="language-btn" onclick="setLanguage('en')">E</button>
     </div>
 
     <div class="container">
         <header>
-            <h1 id="mainTitle">🎯 12 का पहाड़ा सीखें 🎯</h1>
+            <h1 id="mainTitle">12 का पहाड़ा सीखें</h1>
             <p class="subtitle" id="mainSubtitle">मजेदार खेलों के साथ गुणा सीखें!</p>
         </header>
 
         <div id="mainMenu" class="games-grid">
             <div class="game-card">
-                <h3 id="chartTitle">📚 पहाड़े की तालिका</h3>
+                <h3 id="chartTitle">📚 12 का पहाड़ा</h3>
                 <p id="chartDesc">12 का पूरा पहाड़ा देखें और याद करें</p>
-                <button class="btn btn-primary" onclick="showGame('tableChart')" id="chartBtn">तालिका देखें</button>
+                <button class="btn btn-primary" onclick="showGame('tableChart')" id="chartBtn">देखें</button>
             </div>
 
             <div class="game-card">
@@ -413,17 +447,14 @@
 
         <!-- Times Table Chart -->
         <div id="tableChart" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn1">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn1">← वापस जाएं</button>
             <h2 id="tableChartTitle">12 का पहाड़ा</h2>
-            <div class="instructions" id="tableInstructions">
-                नीचे दी गई तालिका को ध्यान से देखें और याद करने की कोशिश करें। प्रत्येक संख्या पर माउस रखने से वह बड़ी हो जाएगी।
-            </div>
             <div class="times-table" id="timesTableGrid"></div>
         </div>
 
         <!-- Quick Fire Quiz -->
         <div id="quickFire" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn2">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn2">← वापस जाएं</button>
             <h2 id="quickFireTitle">⚡ तेज़ प्रश्नोत्तरी</h2>
             <div class="instructions" id="quickFireInstructions">
                 60 सेकंड में जितने हो सके उतने सवालों के जवाब दें। Enter दबाकर या Submit बटन दबाकर जवाब भेजें।
@@ -502,7 +533,7 @@
 
         <!-- Reverse Game -->
         <div id="reverseGame" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← वापस जाएं</button>
             <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
             <div class="instructions" id="reverseInstructions">
                 आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
@@ -812,6 +843,8 @@
         // Show/hide games
         function showGame(gameId) {
             document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('languageToggle').style.display = 'none';
+            document.querySelector('header').style.display = 'none';
             document.querySelectorAll('.game-area').forEach(area => {
                 area.classList.remove('active');
             });
@@ -912,11 +945,12 @@ function updateReverseTimerBar() {
 
         function showMainMenu() {
             document.getElementById('mainMenu').style.display = 'grid';
+            document.getElementById('languageToggle').style.display = 'block';
+            document.querySelector('header').style.display = 'block';
             document.querySelectorAll('.game-area').forEach(area => {
                 area.classList.remove('active');
             });
             currentGame = null;
-            
             // Reset all games
             resetAllGames();
         }
