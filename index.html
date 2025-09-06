@@ -301,25 +301,52 @@
         }
 
         .back-btn {
-            background: linear-gradient(45deg, #636e72, #2d3436);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            backdrop-filter: blur(8px);
             margin-bottom: 20px;
             position: fixed;
             top: 16px;
             left: 16px;
             z-index: 2000;
-            font-size: 0.9em;
-            padding: 6px 16px;
-            border-radius: 18px;
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            border-radius: 50%;
             min-width: unset;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            box-shadow: 0 4px 16px rgba(76, 61, 139, 0.18), 0 1.5px 6px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: box-shadow 0.2s, background 0.2s, transform 0.15s;
+            outline: none;
         }
+
+        .back-btn:hover, .back-btn:focus {
+            background: linear-gradient(135deg, #5a67d8 0%, #764ba2 100%);
+            box-shadow: 0 6px 24px rgba(76, 61, 139, 0.28), 0 2px 8px rgba(0,0,0,0.15);
+            transform: scale(1.08);
+        }
+
+        .back-btn svg {
+            width: 28px;
+            height: 28px;
+            display: block;
+        }
+
+        .back-btn polyline {
+            stroke: #fff;
+            stroke-width: 5;
+            filter: drop-shadow(0 1px 2px rgba(44, 62, 80, 0.25));
+        }
+        
 
         @media (max-width: 600px) {
             .back-btn {
                 top: 8px;
                 left: 8px;
-                font-size: 0.8em;
-                padding: 4px 10px;
+                width: 38px;
+                height: 38px;
             }
         }
         
@@ -390,6 +417,12 @@
             </div>
 
             <div class="game-card">
+                <h3 id="targetTitle">🎯 अभ्यास</h3>
+                <p id="targetDesc">गुणा के सवाल हल करके </p>
+                <button class="btn btn-primary" onclick="showGame('targetPractice')" id="targetBtn">अभ्यास शुरू करें</button>
+            </div>
+
+            <div class="game-card">
                 <h3 id="quizTitle">⚡ तेज़ प्रश्नोत्तरी</h3>
                 <p id="quizDesc">60 सेकंड में जितने हो सके उतने सवालों के जवाब दें!</p>
                 <button class="btn btn-primary" onclick="showGame('quickFire')" id="quizBtn">क्विज़ शुरू करें</button>
@@ -407,11 +440,7 @@
                 <button class="btn btn-primary" onclick="showGame('racing')" id="racingBtn">रेस शुरू करें</button>
             </div>
 
-            <div class="game-card">
-                <h3 id="targetTitle">🎯 निशाना अभ्यास</h3>
-                <p id="targetDesc">गुणा के सवाल हल करके निशाना लगाएं</p>
-                <button class="btn btn-primary" onclick="showGame('targetPractice')" id="targetBtn">अभ्यास शुरू करें</button>
-            </div>
+
 
             <div class="game-card">
                 <h3 id="challengeTitle">🌟 चुनौती मोड</h3>
@@ -428,7 +457,7 @@
 
         <!-- Reverse 12 Table Game -->
         <div id="reverseGame" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
             <div class="instructions" id="reverseInstructions">
                 आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
@@ -447,14 +476,14 @@
 
         <!-- Times Table Chart -->
         <div id="tableChart" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn1">← वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn1" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="tableChartTitle">12 का पहाड़ा</h2>
             <div class="times-table" id="timesTableGrid"></div>
         </div>
 
         <!-- Quick Fire Quiz -->
         <div id="quickFire" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn2">← वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn2" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="quickFireTitle">⚡ तेज़ प्रश्नोत्तरी</h2>
             <div class="instructions" id="quickFireInstructions">
                 60 सेकंड में जितने हो सके उतने सवालों के जवाब दें। Enter दबाकर या Submit बटन दबाकर जवाब भेजें।
@@ -470,7 +499,7 @@
 
         <!-- Memory Match -->
         <div id="memoryMatch" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn3">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn3" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="memoryMatchTitle">🧠 याददाश्त का खेल</h2>
             <div class="instructions" id="memoryInstructions">
                 कार्ड पर क्लिक करें और गुणा के सवाल को उसके सही जवाब से मिलाएं। 6 जोड़े बनाने हैं।
@@ -482,7 +511,7 @@
 
         <!-- Racing Challenge -->
         <div id="racing" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn4">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn4" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="racingGameTitle">🏎️ रेसिंग चुनौती</h2>
             <div class="instructions" id="racingInstructions">
                 10 सवाल सही हल करके अपनी कार को फिनिश लाइन तक पहुंचाएं!
@@ -503,22 +532,18 @@
 
         <!-- Target Practice -->
         <div id="targetPractice" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn5">← खेलों में वापस जाएं</button>
-            <h2 id="targetGameTitle">🎯 निशाना अभ्यास</h2>
-            <div class="instructions" id="targetInstructions">
-                गुणा के सवाल हल करके निशाना लगाएं। आपकी सटीकता का हिसाब रखा जाएगा।
-            </div>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn5" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <h2 id="targetGameTitle">🎯 अभ्यास</h2>
+            <button class="btn btn-success" id="targetStart" onclick="startTarget()">अभ्यास शुरू करें</button>
             <div class="score" id="targetScore">हिट: 0 | सटीकता: 0%</div>
             <div class="question" id="targetQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
             <input type="number" id="targetAnswer" class="answer-input" placeholder="?" style="display:none;">
-            <br>
-            <button class="btn btn-success" id="targetStart" onclick="startTarget()">अभ्यास शुरू करें</button>
             <button class="btn" id="targetSubmit" onclick="submitTarget()" style="display:none;">गोली चलाएं! 🎯</button>
         </div>
 
         <!-- Challenge Mode -->
         <div id="challenge" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn6">← खेलों में वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn6" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="challengeGameTitle">🌟 चुनौती मोड</h2>
             <div class="instructions" id="challengeInstructions">
                 यह सबसे कठिन मोड है! 1 से 12 तक के सभी पहाड़ों से सवाल आएंगे। गलत जवाब देने पर आपकी स्ट्रीक टूट जाएगी।
@@ -533,7 +558,7 @@
 
         <!-- Reverse Game -->
         <div id="reverseGame" class="game-area">
-            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7">← वापस जाएं</button>
+            <button class="btn back-btn" onclick="showMainMenu()" id="backBtn7" aria-label="वापस जाएं"><svg width="28" height="28" viewBox="0 0 28 28" style="display:inline;vertical-align:middle;"><polyline points="18,6 10,14 18,22" stroke="black" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
             <div class="instructions" id="reverseInstructions">
                 आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
@@ -900,6 +925,8 @@ function submitReverse() {
     const userAnswer = parseInt(document.getElementById('reverseAnswer').value);
     const questionElem = document.getElementById('reverseQuestion');
     if (userAnswer === gameData.reverse.currentProblem.num) {
+        document.getElementById('audio-correct').currentTime = 0;
+        document.getElementById('audio-correct').play();
         gameData.reverse.score++;
         const scoreText = currentLanguage === 'hi' ? `स्कोर: ${gameData.reverse.score}` : `Score: ${gameData.reverse.score}`;
         document.getElementById('reverseScore').textContent = scoreText;
@@ -911,6 +938,8 @@ function submitReverse() {
             generateReverseProblem();
         }, 700);
     } else {
+        document.getElementById('audio-wrong').currentTime = 0;
+        document.getElementById('audio-wrong').play();
         questionElem.classList.remove('happy-animation');
         questionElem.classList.add('sad-animation');
         // Show correct answer
@@ -1048,6 +1077,8 @@ function updateReverseTimerBar() {
             const userAnswer = parseInt(document.getElementById('quickFireAnswer').value);
             const questionElem = document.getElementById('quickFireQuestion');
             if (userAnswer === gameData.quickFire.currentProblem.answer) {
+                document.getElementById('audio-correct').currentTime = 0;
+                document.getElementById('audio-correct').play();
                 gameData.quickFire.score++;
                 const scoreText = currentLanguage === 'hi' ? `स्कोर: ${gameData.quickFire.score}` : `Score: ${gameData.quickFire.score}`;
                 document.getElementById('quickFireScore').textContent = scoreText;
@@ -1059,6 +1090,8 @@ function updateReverseTimerBar() {
                     generateQuickFireProblem();
                 }, 700);
             } else {
+                document.getElementById('audio-wrong').currentTime = 0;
+                document.getElementById('audio-wrong').play();
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
                 // Show correct answer
@@ -1142,6 +1175,8 @@ function updateReverseTimerBar() {
             const cardElements = document.querySelectorAll('.memory-card');
             
             if (card1.answer === card2.answer && card1.type !== card2.type) {
+                document.getElementById('audio-correct').currentTime = 0;
+                document.getElementById('audio-correct').play();
                 // Match found
                 cardElements[index1].classList.add('matched');
                 cardElements[index2].classList.add('matched');
@@ -1165,6 +1200,8 @@ function updateReverseTimerBar() {
                     cardElements[index2].classList.remove('happy-animation');
                 }, 700);
             } else {
+                document.getElementById('audio-wrong').currentTime = 0;
+                document.getElementById('audio-wrong').play();
                 // No match
                 cardElements[index1].textContent = '?';
                 cardElements[index2].textContent = '?';
@@ -1211,11 +1248,13 @@ function updateReverseTimerBar() {
             const userAnswer = parseInt(document.getElementById('racingAnswer').value);
             const questionElem = document.getElementById('racingQuestion');
             if (userAnswer === gameData.racing.currentProblem.answer) {
+                document.getElementById('audio-correct').currentTime = 0;
+                document.getElementById('audio-correct').play();
                 gameData.racing.solved++;
                 const progress = (gameData.racing.solved / 10) * 100;
                 const carPosition = (gameData.racing.solved / 10) * 85; // 85% max to keep car visible
                 const scoreText = currentLanguage === 'hi' ? 
-                    `हल किए गए सवाल: ${gameData.racing.solved}/10` :
+                    `हलो गे सवाल: ${gameData.racing.solved}/10` :
                     `Problems Solved: ${gameData.racing.solved}/10`;
                 document.getElementById('racingScore').textContent = scoreText;
                 document.getElementById('racingProgress').style.width = `${progress}%`;
@@ -1243,6 +1282,8 @@ function updateReverseTimerBar() {
                     generateRacingProblem();
                 }, 700);
             } else {
+                document.getElementById('audio-wrong').currentTime = 0;
+                document.getElementById('audio-wrong').play();
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
                 // Show correct answer
@@ -1285,6 +1326,8 @@ function updateReverseTimerBar() {
             gameData.target.attempts++;
             const questionElem = document.getElementById('targetQuestion');
             if (userAnswer === gameData.target.currentProblem.answer) {
+                document.getElementById('audio-correct').currentTime = 0;
+                document.getElementById('audio-correct').play();
                 gameData.target.hits++;
                 questionElem.classList.remove('sad-animation');
                 questionElem.classList.add('happy-animation');
@@ -1299,6 +1342,8 @@ function updateReverseTimerBar() {
                     generateTargetProblem();
                 }, 700);
             } else {
+                document.getElementById('audio-wrong').currentTime = 0;
+                document.getElementById('audio-wrong').play();
                 questionElem.classList.remove('happy-animation');
                 questionElem.classList.add('sad-animation');
                 // Show correct answer
@@ -1344,6 +1389,8 @@ function updateReverseTimerBar() {
             const userAnswer = parseInt(document.getElementById('challengeAnswer').value);
             const questionElem = document.getElementById('challengeQuestion');
             if (userAnswer === gameData.challenge.currentProblem.answer) {
+                document.getElementById('audio-correct').currentTime = 0;
+                document.getElementById('audio-correct').play();
                 gameData.challenge.streak++;
                 questionElem.classList.remove('sad-animation');
                 questionElem.classList.add('happy-animation');
@@ -1354,16 +1401,18 @@ function updateReverseTimerBar() {
                 setTimeout(() => {
                     questionElem.classList.remove('happy-animation', 'sad-animation');
                     const scoreText = currentLanguage === 'hi' ? 
-                        `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
+                        `स्ट्रिक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
                         `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
                     document.getElementById('challengeScore').textContent = scoreText;
                     document.getElementById('challengeAnswer').value = '';
                     generateChallengeProblem();
                 }, 700);
             } else {
+                document.getElementById('audio-wrong').currentTime = 0;
+                document.getElementById('audio-wrong').play();
                 if (gameData.challenge.streak > 0) {
                     const wrongText = currentLanguage === 'hi' ? 
-                        `गलत जवाब! आपकी स्ट्रीक थी ${gameData.challenge.streak}। फिर कोशिश करें!` :
+                        `गलत जवाब! आपकी स्ट्रिक थी ${gameData.challenge.streak}। फिर कोशिश करें!` :
                         `Wrong answer! Your streak was ${gameData.challenge.streak}. Try again!`;
                     alert(wrongText);
                 }
@@ -1377,7 +1426,7 @@ function updateReverseTimerBar() {
                 setTimeout(() => {
                     questionElem.classList.remove('happy-animation', 'sad-animation');
                     const scoreText = currentLanguage === 'hi' ? 
-                        `स्ट्रीक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
+                        `स्ट्रिक: ${gameData.challenge.streak} | सर्वश्रेष्ठ: ${gameData.challenge.best}` :
                         `Streak: ${gameData.challenge.streak} | Best: ${gameData.challenge.best}`;
                     document.getElementById('challengeScore').textContent = scoreText;
                     document.getElementById('challengeAnswer').value = '';
