@@ -29,6 +29,8 @@ export function showGame(gameId) {
     if (gameArea) {
         gameArea.classList.add('active');
         gameArea.style.display = '';
+        // Scroll to top of the page when game is shown
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     currentGame = gameId;
     // Robust back button insertion
