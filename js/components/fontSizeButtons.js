@@ -1,27 +1,55 @@
-// Font size control buttons for game areas
+/**
+ * Constants for font size control configuration
+ */
+const FONT_SIZE_CONFIG = {
+    MIN_SIZE: 0.7,
+    MAX_SIZE: 2.5,
+    STEP_SIZE: 0.1,
+    DEBOUNCE_MS: 120,
+    STORAGE_PREFIX: 'fontSize_'
+};
+
+/**
+ * SVG templates for button icons with accessibility attributes
+ */
+const SVG_TEMPLATES = {
+    increase: `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" 
+        aria-label="Increase font size" role="img" focusable="false" style="display:block;">
+        <rect x="20" y="8" width="8" height="32" rx="4" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+        <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    </svg>`,
+    decrease: `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" 
+        aria-label="Decrease font size" role="img" focusable="false" style="display:block;">
+        <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    </svg>`
+};
+
+/**
+ * Creates font size control buttons for a game area
+ * @param {string} gameAreaId - The ID of the game area element
+ * @returns {HTMLElement} The container element with font size buttons
+ */
 export function createFontSizeButtons(gameAreaId) {
+    if (!gameAreaId || typeof gameAreaId !== 'string') {
+        throw new Error('Invalid gameAreaId provided to createFontSizeButtons');
+    }
+
     const container = document.createElement('div');
     container.className = 'font-size-btns';
-    container.style.display = 'flex';
-    container.style.gap = '0.5em';
-    container.style.marginLeft = 'auto';
 
     const plusBtn = document.createElement('button');
-    plusBtn.className = 'btn font-btn';
+    plusBtn.className = 'btn font-btn font-btn-increase';
     plusBtn.title = 'Increase font size';
-    plusBtn.onclick = () => adjustFontSize(gameAreaId, 1);
-                        plusBtn.innerHTML = `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Increase font size" role="img" style="display:block;">
-                            <rect x="20" y="8" width="8" height="32" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
-                            <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
-                        </svg>`;
+    plusBtn.setAttribute('aria-label', 'Increase font size');
+    plusBtn.onclick = (e) => handleFontSizeClick(e, gameAreaId, 1);
+    plusBtn.innerHTML = SVG_TEMPLATES.increase;
 
     const minusBtn = document.createElement('button');
-    minusBtn.className = 'btn font-btn';
+    minusBtn.className = 'btn font-btn font-btn-decrease';
     minusBtn.title = 'Decrease font size';
-    minusBtn.onclick = () => adjustFontSize(gameAreaId, -1);
-                    minusBtn.innerHTML = `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Decrease font size" role="img" style="display:block;">
-                        <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
-                    </svg>`;
+    minusBtn.setAttribute('aria-label', 'Decrease font size');
+    minusBtn.onclick = (e) => handleFontSizeClick(e, gameAreaId, -1);
+    minusBtn.innerHTML = SVG_TEMPLATES.decrease;
 
     container.appendChild(minusBtn);
     container.appendChild(plusBtn);
@@ -34,13 +62,26 @@ export function createFontSizeButtons(gameAreaId) {
     return container;
 }
 
-function adjustFontSize(gameAreaId, delta) {
+/**
+ * Handles font size button clicks with debouncing
+ * @param {Event} event - The click event object
+ * @param {string} gameAreaId - The ID of the game area
+ * @param {number} delta - The change in font size (-1 or 1)
+ */
+function handleFontSizeClick(event, gameAreaId, delta) {
+    event.preventDefault();
     const area = document.getElementById(gameAreaId);
-    if (!area) return;
-    // Debounce rapid clicks
-    if (area._fontSizeDebounce) return;
+    if (!area) {
+        console.warn(`Game area not found: ${gameAreaId}`);
+        return;
+    }
+
+    if (area._fontSizeDebounce) {
+        return;
+    }
+
     area._fontSizeDebounce = true;
-    setTimeout(() => { area._fontSizeDebounce = false; }, 120);
+    setTimeout(() => { area._fontSizeDebounce = false; }, FONT_SIZE_CONFIG.DEBOUNCE_MS);
 
     // Selector list for font size adjustment. Update if new UI elements are added.
     const selectors = [
