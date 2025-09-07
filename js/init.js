@@ -1,11 +1,13 @@
 import { translations, currentLanguage, setLanguage } from './lang.js';
 import { updateLanguage } from './ui.js';
 import { showGame, showMainMenu, resetAllGames, gameData, currentGame, startTarget, startReverseGame } from './games.js';
+import { insertAllFontSizeButtons } from './insertFontSizeButtons.js';
 
 // On DOMContentLoaded, initialize UI and language
 window.addEventListener('DOMContentLoaded', () => {
     resetAllGames();
     updateLanguage(gameData, currentGame);
+    insertAllFontSizeButtons();
 
     // Language toggle buttons
     document.querySelectorAll('.language-btn').forEach(btn => {

@@ -1,0 +1,114 @@
+// Font size control buttons for game areas
+export function createFontSizeButtons(gameAreaId) {
+    const container = document.createElement('div');
+    container.className = 'font-size-btns';
+    container.style.display = 'flex';
+    container.style.gap = '0.5em';
+    container.style.marginLeft = 'auto';
+
+    const plusBtn = document.createElement('button');
+    plusBtn.className = 'btn font-btn';
+    plusBtn.title = 'Increase font size';
+    plusBtn.onclick = () => adjustFontSize(gameAreaId, 1);
+                        plusBtn.innerHTML = `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Increase font size" role="img" style="display:block;">
+                            <rect x="20" y="8" width="8" height="32" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
+                            <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
+                        </svg>`;
+
+    const minusBtn = document.createElement('button');
+    minusBtn.className = 'btn font-btn';
+    minusBtn.title = 'Decrease font size';
+    minusBtn.onclick = () => adjustFontSize(gameAreaId, -1);
+                    minusBtn.innerHTML = `<svg width="1.7em" height="1.7em" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Decrease font size" role="img" style="display:block;">
+                        <rect x="8" y="20" width="32" height="8" rx="4" stroke="currentColor" stroke-width="6" fill="none"/>
+                    </svg>`;
+
+    container.appendChild(minusBtn);
+    container.appendChild(plusBtn);
+
+    // On load, apply saved font size
+    setTimeout(() => {
+        applySavedFontSize(gameAreaId);
+    }, 0);
+
+    return container;
+}
+
+function adjustFontSize(gameAreaId, delta) {
+    const area = document.getElementById(gameAreaId);
+    if (!area) return;
+    // Debounce rapid clicks
+    if (area._fontSizeDebounce) return;
+    area._fontSizeDebounce = true;
+    setTimeout(() => { area._fontSizeDebounce = false; }, 120);
+
+    // Selector list for font size adjustment. Update if new UI elements are added.
+    const selectors = [
+        '.score', '.question', '.answer-input', '.memory-grid', '.progress-bar', '.times-table',
+        '.table-item', '.memory-card', '.racing-track', '.challenge-content', '.game-content', '.game-desc', '.game-main', '.game-body', '.game-grid', '.game-row', '.game-cell', '.feedback-card', '.challenge-question', '.challenge-answer', '.challenge-score', '.challenge-progress', '.challenge-main', '.challenge-grid', '.challenge-row', '.challenge-cell'
+    ];
+    selectors.forEach(sel => {
+        area.querySelectorAll(sel).forEach(el => {
+            // Exclude h2, .game-header-row, and their children. Update if header structure changes.
+            if (el.closest('.game-header-row') || el.tagName === 'H2') return;
+            // Only affect visible elements
+            if (el.offsetParent === null) return;
+            let current = parseFloat(el.style.fontSize);
+            if (!current || isNaN(current)) {
+                // Try computed style, fallback to parent if needed
+                current = parseFloat(window.getComputedStyle(el).fontSize) / 16;
+                if (!current || isNaN(current)) {
+                    current = el.parentElement ? parseFloat(window.getComputedStyle(el.parentElement).fontSize) / 16 : 1;
+                }
+                if (!current || isNaN(current)) current = 1;
+            }
+            let newSize = current + delta * 0.1;
+            newSize = Math.max(0.7, Math.min(newSize, 2.5));
+            el.style.fontSize = newSize + 'em';
+            // Persist per game
+            try {
+                saveFontSize(gameAreaId, sel, newSize);
+            } catch (e) {
+                // Fallback: show a warning if localStorage fails
+                if (!window._fontSizeStorageWarned) {
+                    window._fontSizeStorageWarned = true;
+                    alert('Font size changes will not be saved due to browser storage restrictions.');
+                }
+            }
+        });
+    });
+}
+
+function saveFontSize(gameAreaId, sel, size) {
+    try {
+        const key = `fontSize_${gameAreaId}_${sel}`;
+        localStorage.setItem(key, size);
+    } catch (e) {
+        // Fallback: do nothing, handled in adjustFontSize
+    }
+}
+
+function applySavedFontSize(gameAreaId) {
+    const area = document.getElementById(gameAreaId);
+    if (!area) return;
+    // Selector list for font size adjustment. Update if new UI elements are added.
+    const selectors = [
+        '.score', '.question', '.answer-input', '.memory-grid', '.progress-bar', '.times-table',
+        '.table-item', '.memory-card', '.racing-track', '.challenge-content', '.game-content', '.game-desc', '.game-main', '.game-body', '.game-grid', '.game-row', '.game-cell', '.feedback-card', '.challenge-question', '.challenge-answer', '.challenge-score', '.challenge-progress', '.challenge-main', '.challenge-grid', '.challenge-row', '.challenge-cell'
+    ];
+    selectors.forEach(sel => {
+        try {
+            const key = `fontSize_${gameAreaId}_${sel}`;
+            const size = parseFloat(localStorage.getItem(key));
+            if (size && !isNaN(size)) {
+                area.querySelectorAll(sel).forEach(el => {
+                    // Exclude h2, .game-header-row, and their children. Update if header structure changes.
+                    if (el.closest('.game-header-row') || el.tagName === 'H2') return;
+                    el.style.fontSize = size + 'em';
+                });
+            }
+        } catch (e) {
+            // Fallback: do nothing, handled in adjustFontSize
+        }
+    });
+}

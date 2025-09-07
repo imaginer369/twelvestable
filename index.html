@@ -17,9 +17,9 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn5-container"></div>
                 <h2 id="targetGameTitle">🎯 अभ्यास</h2>
+                <div class="font-size-btns-container" data-game="targetPractice"></div>
             </div>
             <div class="game-start-row"><button class="btn btn-success" id="targetStart" onclick="startTarget()">अभ्यास शुरू करें</button></div>
-            <div class="instructions" id="targetInstructions">गुणा के सवाल हल करके निशाना लगाएं। आपकी सटीकता का हिसाब रखा जाएगा।</div>
             <div class="score" id="targetScore">हिट: 0 | सटीकता: 0%</div>
             <div class="question" id="targetQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
             <input type="number" id="targetAnswer" class="answer-input" placeholder="?" style="display:none;">
@@ -66,11 +66,9 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn7-container"></div>
                 <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
+                <div class="font-size-btns-container" data-game="reverseGame"></div>
             </div>
             <div class="game-start-row"><button class="btn btn-success" id="reverseStart" onclick="startReverseGame()">खेल शुरू करें</button></div>
-            <div class="instructions" id="reverseInstructions">
-                आपको उत्तर देना है: <b>12 × ? = (दिया गया उत्तर)</b>.<br> जितने चाहें उतने सवाल हल करें!
-            </div>
             <div class="score" id="reverseScore">स्कोर: 0</div>
             <div class="question" id="reverseQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
             <input type="number" id="reverseAnswer" class="answer-input" placeholder="?" style="display:none;">
@@ -82,8 +80,8 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn1-container"></div>
                 <h2 id="tableChartTitle">12 का पहाड़ा</h2>
+                <div class="font-size-btns-container" data-game="tableChart"></div>
             </div>
-            <div class="instructions" id="tableInstructions"></div>
             <div class="times-table" id="timesTableGrid"></div>
             <div style="text-align:center; margin-top:1.5em;">
                 <button class="btn btn-success" id="tableTargetStart" onclick="showGame('targetPractice')">अभ्यास शुरू करें</button>
@@ -95,11 +93,9 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn2-container"></div>
                 <h2 id="quickFireTitle">⚡ तेज़ प्रश्नोत्तरी</h2>
+                <div class="font-size-btns-container" data-game="quickFire"></div>
             </div>
             <div class="game-start-row"><button class="btn btn-success" id="quickFireStart" onclick="startQuickFire()">क्विज़ शुरू करें</button></div>
-            <div class="instructions" id="quickFireInstructions">
-                60 सेकंड में जितने हो सके उतने सवालों के जवाब दें। Enter दबाकर या Submit बटन दबाकर जवाब भेजें।
-            </div>
             <div class="timer" id="timer">समय: 60 सेकंड</div>
             <div class="score" id="quickFireScore">स्कोर: 0</div>
             <div class="question" id="quickFireQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
@@ -112,11 +108,9 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn3-container"></div>
                 <h2 id="memoryMatchTitle">🧠 याददाश्त का खेल</h2>
+                <div class="font-size-btns-container" data-game="memoryMatch"></div>
             </div>
             <div class="game-start-row"><button class="btn btn-success" onclick="initMemoryGame()" id="newGameBtn">नया खेल</button></div>
-            <div class="instructions" id="memoryInstructions">
-                कार्ड पर क्लिक करें और गुणा के सवाल को उसके सही जवाब से मिलाएं। 6 जोड़े बनाने हैं।
-            </div>
             <div class="score" id="memoryScore">जोड़े: 0/6</div>
             <div class="memory-grid" id="memoryGrid"></div>
         </div>
@@ -126,11 +120,9 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn4-container"></div>
                 <h2 id="racingGameTitle">🏎️ रेसिंग चुनौती</h2>
+                <div class="font-size-btns-container" data-game="racing"></div>
             </div>
             <div class="game-start-row"><button class="btn btn-success" id="racingStart" onclick="startRacing()">रेस शुरू करें</button></div>
-            <div class="instructions" id="racingInstructions">
-                10 सवाल सही हल करके अपनी कार को फिनिश लाइन तक पहुंचाएं!
-            </div>
             <div class="score" id="racingScore">हल किए गए सवाल: 0/10</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="racingProgress"></div>
@@ -149,9 +141,7 @@
             <div class="game-header-row">
                 <div class="back-btn-container" id="backBtn6-container"></div>
                 <h2 id="challengeGameTitle">🌟 चुनौती मोड</h2>
-            </div>
-            <div class="instructions" id="challengeInstructions">
-                यह सबसे कठिन मोड है! 1 से 12 तक के सभी पहाड़ों से सवाल आएंगे। गलत जवाब देने पर आपकी स्ट्रीक टूट जाएगी।
+                <div class="font-size-btns-container" data-game="challenge"></div>
             </div>
             <div class="score" id="challengeScore">स्ट्रीक: 0 | सर्वश्रेष्ठ: 0</div>
             <div class="question" id="challengeQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
@@ -165,9 +155,6 @@
         <div id="reverseGame" class="game-area">
             <div class="back-btn-container" id="backBtn7b-container"></div>
             <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
-            <div class="instructions" id="reverseInstructions">
-                आपको उत्तर देना है: 12 × ? = (दिया गया उत्तर)। 5 मिनट में जितने हो सकें!
-            </div>
             <div id="reverseTimer">समय: 5:00</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="reverseProgress"></div>
