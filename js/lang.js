@@ -1,5 +1,4 @@
-// Centralized translations config for all supported languages
-
+// Language translations and language switching logic
 export const translations = {
     hi: {
         reverseTitle: '🔄 उल्टा सवाल',
@@ -142,3 +141,10 @@ export const translations = {
         best: "Best:"
     }
 };
+
+export let currentLanguage = 'hi';
+
+export function setLanguage(lang) {
+    currentLanguage = lang;
+    document.documentElement.lang = lang;
+}
