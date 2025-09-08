@@ -151,23 +151,6 @@
             <button class="btn" id="challengeSubmit" onclick="submitChallenge()" style="display:none;">भेजें</button>
         </div>
 
-        <!-- Reverse Game -->
-        <div id="reverseGame" class="game-area">
-            <div class="back-btn-container" id="backBtn7b-container"></div>
-            <h2 id="reverseGameTitle">🔄 उल्टा सवाल</h2>
-            <div id="reverseTimer">समय: 5:00</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="reverseProgress"></div>
-            </div>
-            <div class="score" id="reverseScore">स्कोर: 0</div>
-            <div class="question" id="reverseQuestion">शुरू करने के लिए स्टार्ट दबाएं!</div>
-            <input type="number" id="reverseAnswer" class="answer-input" placeholder="?" style="display:none;">
-            <br>
-            <button class="btn btn-success" id="reverseStart" onclick="startReverseGame()">खेल शुरू करें</button>
-            <button class="btn" id="reverseSubmit" onclick="submitReverse()" style="display:none;">जवाब भेजें</button>
-        </div>
-    </div>
-
     <audio id="audio-correct" src="audio/correct.mp3" preload="auto"></audio>
     <audio id="audio-wrong" src="audio/wrong.mp3" preload="auto"></audio>
     <script type="module" src="js/init.js"></script>
